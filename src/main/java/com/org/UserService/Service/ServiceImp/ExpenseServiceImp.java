@@ -6,6 +6,7 @@ import com.org.UserService.Service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class ExpenseServiceImp implements ExpenseService {
 
     @Override
     public List<Expenses> findAllExpense() {
-        return expenseRepository.findAll().reversed();
+        List<Expenses> list=expenseRepository.findAll();
+        Collections.reverse(list);
+        return list;
     }
 }

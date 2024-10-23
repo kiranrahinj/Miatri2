@@ -7,9 +7,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserSpendingsResponse {
     private Double spent;
     private Double received;
+
+    public UserSpendingsResponse(Double spent, Double received) {
+        this.spent = spent;
+        this.received = received;
+    }
 }

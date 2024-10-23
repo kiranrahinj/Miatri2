@@ -5,9 +5,11 @@ import com.org.UserService.Entity.Order;
 import com.org.UserService.Repository.CustomerRepository;
 import com.org.UserService.Repository.OrderBookingRepository;
 import com.org.UserService.Service.CustomerService;
+import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -20,31 +22,33 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDetails> getAllCustomers() {
-        return customerRepository.findAll().reversed();
+        List<CustomerDetails> list= customerRepository.findAll();
+        Collections.reverse(list);
+        return list;
     }
     @Override
     public CustomerDetails getCustomerById(int id) {
         return customerRepository.findById(id).orElseThrow(()-> new RuntimeException("Customer not found"));
     }
     @Override
-    public CustomerDetails updateCustomerById(int id, CustomerDetails customerDetails) {
+    public CustomerDetails updateCustomerById(int id, CustomerDetails customer) {
 
         customerRepository.findById(id).orElseThrow(()-> new RuntimeException("Customer not found"));
 
-        int remainig_amount= customerDetails.getTotalAmount()-customerDetails.getReceivedAmount();
-        remainig_amount=remainig_amount >0 ?remainig_amount:0;
+        int remainig_amount= customer.getTotalAmount()-customer.getReceivedAmount();
+        remainig_amount= Math.max(remainig_amount, 0);
 
-        customerDetails.setId(id);
-        customerDetails.setRemainingAmount(remainig_amount);
-        customerRepository.save(customerDetails);
+        customer.setId(id);
+        customer.setRemainingAmount(remainig_amount);
+        customerRepository.save(customer);
 
         Order order= orderBookingRepository.findById(id).orElseThrow(()-> new RuntimeException("OrderBooking not found"));
-        order.setRecievedAmount(customerDetails.getReceivedAmount());
-        order.setRecievedTo(customerDetails.getAmountRecievedTo());
+        order.setRecievedAmount(customer.getReceivedAmount());
+        order.setRecievedTo(customer.getAmountRecievedTo());
 
         orderBookingRepository.save(order);
 
-        return customerDetails;
+        return customer;
     }
 }
 

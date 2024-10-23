@@ -36,8 +36,6 @@ public class OrderController {
 
     @PutMapping("/update_order/{id}")
     public Order updateOrders(@RequestBody Order order, @PathVariable int id, @AuthenticationPrincipal UserDetails userDetails){
-        log.info(String.valueOf(id));
-        log.info(order.toString());
         return orderBookingService.updateOrder(order,id,userDetails.getUsername());
     }
 
