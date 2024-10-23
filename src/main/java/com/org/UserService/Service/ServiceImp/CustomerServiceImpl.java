@@ -35,18 +35,20 @@ public class CustomerServiceImpl implements CustomerService {
 
         customerRepository.findById(id).orElseThrow(()-> new RuntimeException("Customer not found"));
 
-        int remainig_amount= customer.getTotalAmount()-customer.getReceivedAmount();
-        remainig_amount= Math.max(remainig_amount, 0);
-
-        customer.setId(id);
-        customer.setRemainingAmount(remainig_amount);
-        customerRepository.save(customer);
-
         Order order= orderBookingRepository.findById(id).orElseThrow(()-> new RuntimeException("OrderBooking not found"));
         order.setRecievedAmount(customer.getReceivedAmount());
         order.setRecievedTo(customer.getAmountRecievedTo());
 
         orderBookingRepository.save(order);
+
+        int remainig_amount= customer.getTotalAmount()-customer.getReceivedAmount();
+        remainig_amount= Math.max(remainig_amount, 0);
+
+        customer.setId(id);
+        customer.setRemainingAmount(remainig_amount);
+        customer.setDate(order.getDate());
+        customer.setLocation(order.getLocation());
+        customerRepository.save(customer);
 
         return customer;
     }
