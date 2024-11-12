@@ -5,6 +5,7 @@ import com.org.UserService.Service.OrderBookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,19 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable int id){
+    public Order getOrderById(@PathVariable String id){
        return orderBookingService.getOrderById(id);
     }
 
     @PutMapping("/update_order/{id}")
-    public Order updateOrders(@RequestBody Order order, @PathVariable int id, @AuthenticationPrincipal UserDetails userDetails){
+    public Order updateOrders(@RequestBody Order order, @PathVariable String id, @AuthenticationPrincipal UserDetails userDetails){
         return orderBookingService.updateOrder(order,id,userDetails.getUsername());
     }
+
+//    @DeleteMapping("/deleteOrder/{id}")
+//    public void deleteorder(@PathVariable("id") int id){
+//        orderBookingService.deleteorder(id);
+//    }
 
 //    @GetMapping("/customerName")
 //    public List<Order> findOrderByName(@RequestParam String name){

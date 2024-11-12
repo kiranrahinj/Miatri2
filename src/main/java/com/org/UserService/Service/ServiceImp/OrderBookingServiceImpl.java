@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderBookingServiceImpl implements OrderBookingService {
@@ -63,7 +64,9 @@ public class OrderBookingServiceImpl implements OrderBookingService {
         int remainig_amount = order.getRate() - order.getRecievedAmount();
         remainig_amount = remainig_amount > 0 ? remainig_amount : 0;
 
-        customerRepository.save(CustomerDetails.builder()
+        String id= UUID.randomUUID().toString();
+        order.setOid(id);
+        customerRepository.save(CustomerDetails.builder().cid(id)
                 .name(order.getName()).date(order.getDate())
                 .amountRecievedTo(order.getRecievedTo())
                 .totalAmount(order.getRate())
@@ -84,17 +87,17 @@ public class OrderBookingServiceImpl implements OrderBookingService {
     }
 
     @Override
-    public Order updateOrder(Order order, int id, String userName) {
-        Order oldorder = orderBookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Order is not found by id: " + id));
-        order.setId(id);
+    public Order updateOrder(Order order, String id, String userName) {
+        Order oldorder = orderBookingRepository.findById("id").orElseThrow(() -> new RuntimeException("Order is not found by id: " + id));
+        order.setOid(id);
         order.setOrderCreatedBy(userName);
         orderBookingRepository.save(order);
 
         int remainig_amount = order.getRate() - order.getRecievedAmount();
         remainig_amount = remainig_amount > 0 ? remainig_amount : 0;
 
-        CustomerDetails customerDetails = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer is not found by id: " + id));
-        customerRepository.save(CustomerDetails.builder().id(order.getId())
+        CustomerDetails customerDetails = customerRepository.findByCid(id).orElseThrow(() -> new RuntimeException("Customer is not found by id: " + id));
+        customerRepository.save(CustomerDetails.builder().cid(order.getOid())
                 .name(order.getName()).date(order.getDate())
                 .amountRecievedTo(order.getRecievedTo())
                 .totalAmount(order.getRate())
@@ -107,8 +110,13 @@ public class OrderBookingServiceImpl implements OrderBookingService {
     }
 
     @Override
-    public Order getOrderById(int id) {
-        return orderBookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Order is not found by id: " + id));
+    public void deleteorder(String id) {
+        orderBookingRepository.deleteById(id);
+    }
+
+    @Override
+    public Order getOrderById(String id) {
+        return orderBookingRepository.findByOid(id).orElseThrow(() -> new RuntimeException("Order is not found by id: " + id));
     }
 
 }

@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UserServiceImp implements UserService {
     @Autowired
@@ -35,7 +37,9 @@ public class UserServiceImp implements UserService {
            if(userRepository.findByEmail(userDTO.getEmail()) != null) {
                return ResponseDTO.builder().message("Email Already Exists").build();
            }
+           String id= UUID.randomUUID().toString();
            User user= User.builder()
+                   .id(id)
                    .email(userDTO.getEmail())
                    .name(userDTO.getUserName())
                    .role(userDTO.getRole())

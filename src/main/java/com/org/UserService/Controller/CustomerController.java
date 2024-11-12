@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user/customer")
 public class CustomerController {
+
     @Autowired
     private CustomerService customerService;
 
@@ -18,11 +19,11 @@ public class CustomerController {
         return customerService.getAllCustomers();
     }
     @GetMapping("/getCustomer/{id}")
-    public CustomerDetails getCustomerById(@PathVariable int id){
+    public CustomerDetails getCustomerById(@PathVariable String id){
         return customerService.getCustomerById(id);
     }
     @PutMapping("/updateCustomer/{id}")
-    public CustomerDetails updateCustomerById(@PathVariable int id, @RequestBody CustomerDetails customerDetails){
+    public CustomerDetails updateCustomerById(@PathVariable String id, @RequestBody CustomerDetails customerDetails){
         return customerService.updateCustomerById(id, customerDetails);
     }
 }

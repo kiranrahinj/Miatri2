@@ -5,7 +5,7 @@ import com.org.UserService.Entity.Order;
 import com.org.UserService.Repository.CustomerRepository;
 import com.org.UserService.Repository.OrderBookingRepository;
 import com.org.UserService.Service.CustomerService;
-import org.hibernate.query.NativeQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +27,16 @@ public class CustomerServiceImpl implements CustomerService {
         return list;
     }
     @Override
-    public CustomerDetails getCustomerById(int id) {
-        return customerRepository.findById(id).orElseThrow(()-> new RuntimeException("Customer not found"));
+    public CustomerDetails getCustomerById(String id) {
+        return customerRepository.findByCid(id).orElseThrow(()-> new RuntimeException("Customer not found"));
+
     }
     @Override
-    public CustomerDetails updateCustomerById(int id, CustomerDetails customer) {
+    public CustomerDetails updateCustomerById(String id, CustomerDetails customer) {
 
-        customerRepository.findById(id).orElseThrow(()-> new RuntimeException("Customer not found"));
+        customerRepository.findByCid(id).orElseThrow(()-> new RuntimeException("Customer not found"));
 
-        Order order= orderBookingRepository.findById(id).orElseThrow(()-> new RuntimeException("OrderBooking not found"));
+        Order order= orderBookingRepository.findById("").orElseThrow(()-> new RuntimeException("OrderBooking not found"));
         order.setRecievedAmount(customer.getReceivedAmount());
         order.setRecievedTo(customer.getAmountRecievedTo());
 
@@ -44,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
         int remainig_amount= customer.getTotalAmount()-customer.getReceivedAmount();
         remainig_amount= Math.max(remainig_amount, 0);
 
-        customer.setId(id);
+        customer.setCid(id);
         customer.setRemainingAmount(remainig_amount);
         customer.setDate(order.getDate());
         customer.setLocation(order.getLocation());

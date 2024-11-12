@@ -1,8 +1,9 @@
 package com.org.UserService.Entity;
 
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -10,13 +11,12 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+
 @ToString
-@Table(name = "order_booking")
+@Document(collation = "order_booking")
 public class Order {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private String oid;
 
     private String name;
 
@@ -24,7 +24,6 @@ public class Order {
 
     private String status="Pending";
 
-    @Temporal(TemporalType.DATE)
     private Date date;
 
     private String materialType;

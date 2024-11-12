@@ -15,7 +15,9 @@ public interface OrderBookingService {
 
     List<Order> findAllOrders();
 
-    Order updateOrder(Order order, int id, String userName);
+    Order updateOrder(Order order, String id, String userName);
 
-    Order getOrderById(int id);
+    void deleteorder(String id);
+
+    Order getOrderById(String id);
 }

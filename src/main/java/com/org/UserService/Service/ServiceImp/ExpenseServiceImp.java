@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ExpenseServiceImp implements ExpenseService {
@@ -29,6 +30,8 @@ public class ExpenseServiceImp implements ExpenseService {
 
     @Override
     public Expenses addExpense(Expenses expenses, String userName) {
+        String id= UUID.randomUUID().toString();
+        expenses.setId(id);
         expenses.setExpenseCreatedBy(userName);
         return expenseRepository.save(expenses);
     }

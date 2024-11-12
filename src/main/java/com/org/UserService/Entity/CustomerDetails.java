@@ -1,7 +1,9 @@
 package com.org.UserService.Entity;
 
-import jakarta.persistence.*;
+
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -9,19 +11,16 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Builder
-@Table(name = "customer_detail")
+@Document(collation = "customer_detail")
 public class CustomerDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String cid;
 
     private String name;
 
     private String location;
 
-    @Temporal(TemporalType.DATE)
     private Date date;
 
     private int totalAmount;
